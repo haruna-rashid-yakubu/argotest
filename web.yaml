@@ -45,7 +45,7 @@ metadata:
     traefik.ingress.kubernetes.io/router.tls.certresolver: "myresolver"
 spec:
   rules:
-    - host: "ucb-tombola.sem-a.com"
+    - host: "sabc-tombola.sem-a.com"
       http:
         paths:
           - pathType: Prefix
@@ -57,5 +57,5 @@ spec:
                   number: 4000
   tls:
     - hosts:
-        - "ucb-tombola.sem-a.com"
+        - "sabc-tombola.sem-a.com"
       secretName: sabc-tls
