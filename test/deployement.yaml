@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sabc
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sabc
+  template:
+    metadata:
+      labels:
+        app: sabc
+    spec:
+      containers:
+        - name: sabc
+          image: ghcr.io/kaeyros-analytics/sabc_scratchapp
+          ports:
+            - containerPort: 4000
