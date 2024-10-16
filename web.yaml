@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sabc
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sabc
+  template:
+    metadata:
+      labels:
+        app: sabc
+    spec:
+      containers:
+        - name: sabc
+          image: ghcr.io/kaeyros-analytics/sabc_scratchapp
+          ports:
+            - containerPort: 4000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: sabc
+  namespace: default
+spec:
+  type: ClusterIP
+  selector:
+    app: sabc
+  ports:
+    - port: 4000
+      targetPort: 4000
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: sabc
+  namespace: default
+  annotations:
+    kubernetes.io/ingress.class: "traefik"
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/router.tls.certresolver: "myresolver"
+spec:
+  rules:
+    - host: "ucb-tombola.sem-a.com"
+      http:
+        paths:
+          - pathType: Prefix
+            path: "/"
+            backend:
+              service:
+                name: sabc
+                port:
+                  number: 4000
+  tls:
+    - hosts:
+        - "ucb-tombola.sem-a.com"
+      secretName: sabc-tls
